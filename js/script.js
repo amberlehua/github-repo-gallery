@@ -1,10 +1,10 @@
-//This div is where my profile information will appear
 const overview = document.querySelector(".overview");
 const username = "amberlehua";
 const repoList = document.querySelector(".repo-list");
 const repoInfoDisplay = document.querySelector(".repos");
 const repoDataDisplay = document.querySelector(".repo-data");
-
+const backButton = document.querySelector(".view-repos");
+const filterInput = document.querySelector(".filter-repos");
 
 
 const gitUserInfo = async function () {
@@ -45,11 +45,9 @@ const repoDisplay = function (repos) {
     repoItem.classList.add("repo");
     repoItem.innerHTML = `<h3>${repo.name}</h3>`
     repoList.append(repoItem);
+    filterInput.classList.remove("hide");
   }
 };
-
-// At the bottom of your code, create an event listener called repoList for a click event on the unordered list 
-//  with a class of “repo-list.” Pass the event (e) in the callback function. 
 
 repoList.addEventListener ("click", function (e) {
   if (e.target.matches("h3")) {
@@ -79,6 +77,7 @@ const getRepoInfo = async function (repoName) {
     repoDataDisplay.innerHTML = ""
     repoDataDisplay.classList.remove("hide");
     repoInfoDisplay.classList.add("hide");
+    backButton.classList.remove("hide");
     const div = document.createElement("div");
     div.innerHTML =   `
       <h3>Name: ${repoInfo.name}</h3>
@@ -89,3 +88,25 @@ const getRepoInfo = async function (repoName) {
     `;
   repoDataDisplay.append(div);
 };
+
+
+backButton.addEventListener ("click", function ()  {
+  repoInfoDisplay.classList.remove("hide");
+  displayRepoInfo.classList.add("hide");
+  backButton.classList.add("hide");
+});
+
+filterInput.addEventListener ("input", function (e) {
+  const searchText = e.target.value;
+  const repos = document.querySelectorAll(".repo");
+  const lowerCaseInput = searchText.toLowerCase();
+
+  for (const repo of repos) {
+    const repoLowerText = repo.innerText.toLowerCase();
+    if (repoLowerText.includes(lowerCaseInput) ) {
+      repo.classList.remove("hide")
+    } else {
+      repo.classList.add("hide")
+    }
+  }
+})
